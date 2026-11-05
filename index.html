@@ -7,78 +7,92 @@
 
     <title>Water Bottle Collector</title>
 
-    <!-- Connect CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
     <h1>💧 Water Bottle Collector!</h1>
 
-    <p>Collect 10 full water bottles before time runs out!</p>
+    <p>Collect water bottles before time runs out!</p>
 
-    <!-- Score and Timer -->
+    <!-- Difficulty selection -->
+    <h2>Choose Your Difficulty</h2>
+
+    <div class="difficulty-buttons">
+
+        <button class="difficulty selected"
+            onclick="selectDifficulty('easy', this)">
+            🟢 Easy
+        </button>
+
+        <button class="difficulty"
+            onclick="selectDifficulty('normal', this)">
+            🟡 Normal
+        </button>
+
+        <button class="difficulty"
+            onclick="selectDifficulty('hard', this)">
+            🔴 Hard
+        </button>
+
+    </div>
+
+    <p id="difficulty-message">
+        Easy Mode Selected!
+    </p>
+
+    <!-- Scoreboard -->
+     <h3>🌍 Clean Water Mission Progress</h3>
+
+<div class="progress-container">
+
+    <div id="progress-bar"></div>
+
+</div>
+
+<p id="progress-text">0% Completed</p>
     <div class="scoreboard">
 
         <h2>⭐ Score: <span id="score">0</span></h2>
 
-        <h2>⏱️ Time: <span id="timer">30</span></h2>
+        <h2>⏱️ Time: <span id="timer">45</span></h2>
 
-        <h2>Goal: 100</h2>
-
-    </div>
-
-    <!-- Living Room -->
-    <div id="game-area">
-
-        <div class="window">☀️</div>
-
-        <div class="couch">🛋️</div>
-
-        <div class="table">🪑</div>
-
-        <div class="plant">🪴</div>
-
-        <div class="rug"></div>
-
-        <!-- Water bottles will appear here -->
+        <h2>🎯 Goal: <span id="goal">50</span></h2>
 
     </div>
 
-    <!-- Game Instructions -->
-    <p>
-        💧 Full bottle = +10 points
-        <br>
-        🧴 Empty bottle = -5 seconds
-    </p>
-<!-- Difficulty Selection -->
-<h2>Choose Your Difficulty</h2>
+    <!-- Living room -->
 
-<div class="difficulty-buttons">
+    <!-- Living room game area -->
+<div id="game-area">
 
-    <button onclick="selectDifficulty('easy')">
-        🟢 Easy
-    </button>
+    <div class="window">☀️</div>
 
-    <button onclick="selectDifficulty('normal')">
-        🟡 Normal
-    </button>
+    <div class="couch">🛋️</div>
 
-    <button onclick="selectDifficulty('hard')">
-        🔴 Hard
-    </button>
+    <div class="table">🪑</div>
+
+    <div class="plant">🪴</div>
+
+    <div class="rug"></div>
+
+    <!-- Bottles will be added here using JavaScript -->
 
 </div>
 
-<p id="difficulty-message">
-    Selected: Normal
+<!-- Message when a bottle is collected -->
+<p id="game-message">
+    Click on the water bottles to collect them!
 </p>
-    <!-- Start Button -->
+
+
+    <!-- Start button -->
     <button id="start-button" onclick="startGame()">
         START GAME
     </button>
 
-    <!-- Winning and Losing Screen -->
+    <!-- Game over screen -->
     <div id="message-screen" class="hidden">
 
         <h1 id="message"></h1>
@@ -91,8 +105,68 @@
 
     </div>
 
-    <!-- Connect JavaScript -->
+<!-- Game sound effects -->
+
+<audio id="collect-sound" src="sounds/yodguard-item-pickup-1-540174.mp3"></audio>
     <script src="script.js"></script>
 
+<!-- charity: water information section -->
+<section class="charity-section">
+
+    <h2>💧 Help Bring Clean Water to Everyone!</h2>
+
+    <p>
+        Did you know that many people around the world
+        do not have access to clean and safe drinking water?
+    </p>
+
+    <p>
+        charity: water is a nonprofit organization
+        that helps bring clean and safe drinking water
+        to communities around the world.
+    </p>
+
+    <p>
+        Want to make a difference? Learn more or help
+        support clean water projects!
+    </p>
+
+    <div class="charity-links">
+
+        <a href="https://www.charitywater.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+            Visit charity: water
+        </a>
+
+        <a href="https://www.charitywater.org/donate"
+           target="_blank"
+           rel="noopener noreferrer">
+            Donate to Clean Water 💛
+        </a>
+
+    </div>
+
+</section>
+
+<!-- Website footer -->
+<footer>
+
+    <p>💧 Water Bottle Collector Game</p>
+
+    <p>Helping spread awareness about clean water!</p>
+
+    <p>
+        Learn more at
+        <a href="https://www.charitywater.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+            charity: water
+        </a>
+    </p>
+
+    <p>© 2026 Water Bottle Collector</p>
+
+</footer>
 </body>
 </html>
