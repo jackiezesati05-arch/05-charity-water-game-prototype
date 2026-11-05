@@ -1,184 +1,187 @@
-* {
-    box-sizing: border-box;
-}
-
+ 
+/* Background of the page */
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background: #e5f5ed;
     text-align: center;
-    color: #244b40;
-}
-
-.game-container {
-    max-width: 850px;
-    margin: 20px auto;
+    background-color: #f4e5ce;
+    margin: 0;
     padding: 20px;
 }
 
+/* Game title */
 h1 {
-    color: #168b78;
+    color: #385c48;
 }
 
-.instructions {
-    font-size: 16px;
-}
-
-.game-info {
+/* Scoreboard */
+.scoreboard {
     display: flex;
-    justify-content: space-around;
-    gap: 10px;
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    margin: 20px 0;
-    font-size: 19px;
-    font-weight: bold;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    color: #385c48;
 }
 
-.living-room {
-    position: relative;
-    height: 420px;
-    overflow: hidden;
-    border: 6px solid #986b47;
+/* Living room game area */
+#game-area {
+    width: 90%;
+    max-width: 800px;
+    height: 450px;
+    margin: 20px auto;
+
+    background: linear-gradient(
+        to bottom,
+        #d8eafa 0%,
+        #d8eafa 30%,
+        #e9c99f 30%,
+        #e9c99f 70%,
+        #b9875e 70%,
+        #b9875e 100%
+    );
+
+    border: 6px solid #754c35;
     border-radius: 15px;
-    background:
-        linear-gradient(to bottom,
-        #f8dcb5 0%,
-        #f8dcb5 68%,
-        #b98256 68%,
-        #b98256 100%);
+
+    position: relative;
+    overflow: hidden;
 }
 
+/* Window */
 .window {
     position: absolute;
     top: 20px;
-    left: 30px;
-    font-size: 55px;
+    left: 40px;
+    font-size: 60px;
+    background: lightblue;
+    border: 5px solid white;
+    border-radius: 10px;
+    padding: 10px;
 }
 
-.sofa {
+/* Couch */
+.couch {
     position: absolute;
-    top: 95px;
-    left: 35%;
-    font-size: 85px;
+    bottom: 100px;
+    left: 40px;
+    font-size: 90px;
 }
 
-.plant {
-    position: absolute;
-    font-size: 55px;
-}
-
-.plant-one {
-    bottom: 35px;
-    right: 20px;
-}
-
+/* Table */
 .table {
     position: absolute;
-    bottom: 20px;
-    left: 45%;
-    font-size: 55px;
+    right: 100px;
+    bottom: 100px;
+    font-size: 60px;
 }
 
+/* Plant */
+.plant {
+    position: absolute;
+    right: 30px;
+    bottom: 100px;
+    font-size: 50px;
+}
+
+/* Rug */
 .rug {
     position: absolute;
-    bottom: 5px;
-    left: 20%;
-    width: 60%;
-    height: 90px;
+    width: 350px;
+    height: 100px;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #b85c50;
     border-radius: 50%;
-    background: #d8a0a0;
-    opacity: 0.65;
 }
 
+/* Water bottles */
 .bottle {
     position: absolute;
-    z-index: 2;
-    width: 55px;
-    height: 65px;
-    border: 2px solid #ffffff;
-    border-radius: 12px;
-    background: #c6f0ff;
-    font-size: 25px;
+    font-size: 35px;
     cursor: pointer;
+    z-index: 5;
+    border: none;
+    background: transparent;
     transition: transform 0.2s;
 }
 
 .bottle:hover {
-    transform: scale(1.2);
+    transform: scale(1.3);
 }
 
-.bottle.empty {
-    background: #eeeeee;
-}
-
-.bottle:disabled {
-    cursor: default;
-    opacity: 0.5;
-}
-
-.message {
-    margin: 15px;
-    font-weight: bold;
-    min-height: 24px;
-}
-
+/* Buttons */
 button {
-    background: #168b78;
+    background-color: #4b9971;
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 18px;
     cursor: pointer;
 }
 
 button:hover {
-    background: #106b5c;
+    background-color: #35734f;
 }
 
-.end-screen {
+/* Winning and losing screen */
+#message-screen {
     background: white;
+    border: 4px solid #4b9971;
+    border-radius: 20px;
     padding: 25px;
+    max-width: 400px;
     margin: 20px auto;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px #0002;
 }
 
+/* Hide elements */
 .hidden {
-    display: none;
+    display: none !important;
 }
 
-/* Confetti celebration */
-
+/* Confetti */
 .confetti {
     position: fixed;
-    top: -15px;
+    top: -20px;
     width: 10px;
-    height: 14px;
-    z-index: 10;
+    height: 15px;
+    z-index: 20;
+    animation: fall 5s linear forwards;
     pointer-events: none;
-    animation: fall 3s linear forwards;
 }
 
+/* Confetti falling animation */
 @keyframes fall {
+
     to {
-        transform: translateY(105vh) rotate(720deg);
+        transform: translateY(110vh) rotate(720deg);
     }
+/* Difficulty buttons */
+.difficulty-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px;
 }
 
-@media (max-width: 600px) {
-    .living-room {
-        height: 380px;
-    }
+.difficulty-buttons button {
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-    .game-info {
-        font-size: 14px;
-    }
+/* Selected difficulty */
+.difficulty-buttons button.selected {
+    border: 3px solid #333;
+    transform: scale(1.08);
+}
 
-    .sofa {
-        left: 30%;
-        font-size: 65px;
-    }
+/* Difficulty message */
+#difficulty-message {
+    font-weight: bold;
+    color: #385c48;
+}
 }

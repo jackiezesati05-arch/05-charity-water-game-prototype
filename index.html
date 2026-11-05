@@ -1,49 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clean Water Challenge</title>
+
+    <title>Water Bottle Collector</title>
+
+    <!-- Connect CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div class="game-container">
-        <h1>💧 Clean Water Challenge</h1>
-        <p class="instructions">
-            Collect all the full water bottles before time runs out!
-            Avoid empty bottles!
-        </p>
+    <h1>💧 Water Bottle Collector!</h1>
 
-        <div class="game-info">
-            <div>Score: <span id="score">0</span></div>
-            <div>Time: <span id="timer">30</span>s</div>
-            <div>Left: <span id="remaining">8</span></div>
-        </div>
+    <p>Collect 10 full water bottles before time runs out!</p>
 
-        <div id="living-room" class="living-room">
-            <div class="window">☀️</div>
-            <div class="sofa">🛋️</div>
-            <div class="plant plant-one">🪴</div>
-            <div class="table">🪑</div>
-            <div class="rug"></div>
+    <!-- Score and Timer -->
+    <div class="scoreboard">
 
-            <!-- Bottles will appear here -->
-        </div>
+        <h2>⭐ Score: <span id="score">0</span></h2>
 
-        <div id="message" class="message">
-            Find all 8 full water bottles!
-        </div>
+        <h2>⏱️ Time: <span id="timer">30</span></h2>
 
-        <button id="reset-button">🔄 Reset Game</button>
+        <h2>Goal: 100</h2>
 
-        <div id="end-screen" class="end-screen hidden">
-            <h2 id="end-title"></h2>
-            <p id="end-message"></p>
-            <button id="play-again">Play Again</button>
-        </div>
     </div>
 
+    <!-- Living Room -->
+    <div id="game-area">
+
+        <div class="window">☀️</div>
+
+        <div class="couch">🛋️</div>
+
+        <div class="table">🪑</div>
+
+        <div class="plant">🪴</div>
+
+        <div class="rug"></div>
+
+        <!-- Water bottles will appear here -->
+
+    </div>
+
+    <!-- Game Instructions -->
+    <p>
+        💧 Full bottle = +10 points
+        <br>
+        🧴 Empty bottle = -5 seconds
+    </p>
+<!-- Difficulty Selection -->
+<h2>Choose Your Difficulty</h2>
+
+<div class="difficulty-buttons">
+
+    <button onclick="selectDifficulty('easy')">
+        🟢 Easy
+    </button>
+
+    <button onclick="selectDifficulty('normal')">
+        🟡 Normal
+    </button>
+
+    <button onclick="selectDifficulty('hard')">
+        🔴 Hard
+    </button>
+
+</div>
+
+<p id="difficulty-message">
+    Selected: Normal
+</p>
+    <!-- Start Button -->
+    <button id="start-button" onclick="startGame()">
+        START GAME
+    </button>
+
+    <!-- Winning and Losing Screen -->
+    <div id="message-screen" class="hidden">
+
+        <h1 id="message"></h1>
+
+        <p id="final-score"></p>
+
+        <button onclick="resetGame()">
+            PLAY AGAIN
+        </button>
+
+    </div>
+
+    <!-- Connect JavaScript -->
     <script src="script.js"></script>
+
 </body>
 </html>

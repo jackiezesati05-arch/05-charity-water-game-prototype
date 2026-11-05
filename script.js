@@ -1,220 +1,422 @@
-// GAME SETTINGS
-const totalFullBottles = 8;
-const totalEmptyBottles = 2;
+// Difficulty settings
+let difficulty = "normal";
 
+// Game settings for each difficulty
+const difficulties = {
+
+    easy: {
+        time: 45,
+        goal: 50,
+        bottleSpeed: 1500
+    },
+
+    normal: {
+        time: 30,
+        goal: 100,
+        bottleSpeed: 850
+    },
+
+    hard: {
+        time: 20,
+        goal: 150,
+        bottleSpeed: 500
+    }
+// Select difficulty
+function selectDifficulty(level) {
+
+    // Save selected difficulty
+    difficulty = level;
+
+    // Get difficulty settings
+    const settings = difficulties[level];
+
+    // Display selected difficulty
+    document.getElementById("difficulty-message").textContent =
+        "Selected: " + level.toUpperCase() +
+        " | Time: " + settings.time +
+        " seconds | Goal: " + settings.goal + " points";
+
+    // Highlight selected button
+    const buttons = document.querySelectorAll(".difficulty-buttons button");
+
+    buttons.forEach(function(button) {
+
+        button.classList.remove("selected");
+
+    });
+
+    // Highlight clicked button
+    event.target.classList.add("selected");
+
+}
+};
+// Game variables
 let score = 0;
 let timeLeft = 30;
-let fullBottlesCollected = 0;
-let timerInterval;
-let gameActive = false;
 
-// GET HTML ELEMENTS
+let timer;
+let bottleTimer;
+
+let gameRunning = false;
+
+
+// Get HTML elements
 const scoreDisplay = document.getElementById("score");
+
 const timerDisplay = document.getElementById("timer");
-const remainingDisplay = document.getElementById("remaining");
-const livingRoom = document.getElementById("living-room");
+
+const gameArea = document.getElementById("game-area");
+
+const messageScreen = document.getElementById("message-screen");
+
 const message = document.getElementById("message");
 
-const endScreen = document.getElementById("end-screen");
-const endTitle = document.getElementById("end-title");
-const endMessage = document.getElementById("end-message");
+const finalScore = document.getElementById("final-score");
 
-const resetButton = document.getElementById("reset-button");
-const playAgainButton = document.getElementById("play-again");
+const startButton = document.getElementById("start-button");
+
 
 // START THE GAME
 function startGame() {
-    clearInterval(timerInterval);
 
+    if (gameRunning) {
+        return;
+    }
+
+    // Get selected difficulty settings
+    const settings = difficulties[difficulty];
+
+    // Set game values
     score = 0;
-    timeLeft = 30;
-    fullBottlesCollected = 0;
-    gameActive = true;
+
+    timeLeft = settings.time;
+
+    gameRunning = true;
 
     scoreDisplay.textContent = score;
+
     timerDisplay.textContent = timeLeft;
-    remainingDisplay.textContent = totalFullBottles;
 
-    message.textContent = "Find all 8 full water bottles!";
-    endScreen.classList.add("hidden");
+    messageScreen.classList.add("hidden");
 
-    // Remove old bottles but keep living room decorations
-    document.querySelectorAll(".bottle").forEach(bottle => {
-        bottle.remove();
-    });
+    startButton.classList.add("hidden");
 
-    // Remove old confetti
-    document.querySelectorAll(".confetti").forEach(piece => {
-        piece.remove();
-    });
+    // Start countdown
+    timer = setInterval(function() {
 
-    createBottles();
-
-    // Start the countdown
-    timerInterval = setInterval(() => {
         timeLeft--;
+
         timerDisplay.textContent = timeLeft;
 
         if (timeLeft <= 0) {
+
             endGame(false);
+
         }
+
     }, 1000);
+
+    // Create bottles based on difficulty speed
+    bottleTimer = setInterval(function() {
+
+        createBottle();
+
+    }, settings.bottleSpeed);
+
+    // Create first bottle
+    createBottle();
+
 }
+
+    // Start the countdown
+    timer = setInterval(function() {
+
+        timeLeft--;
+
+        timerDisplay.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+
+            endGame(false);
+
+        }
+
+    }, 1000);
+
+
+    // Create a bottle every second
+    bottleTimer = setInterval(function() {
+
+        createBottle();
+
+    }, 850);
+
+
+    // Create the first bottle
+    createBottle();
+
+}
+
 
 // CREATE WATER BOTTLES
-function createBottles() {
+function createBottle() {
 
-    const bottles = [];
-
-    // Add full bottles
-    for (let i = 0; i < totalFullBottles; i++) {
-        bottles.push("full");
+    if (!gameRunning) {
+        return;
     }
 
-    // Add empty bottles
-    for (let i = 0; i < totalEmptyBottles; i++) {
-        bottles.push("empty");
-    }
+    const bottle = document.createElement("button");
 
-    // Mix up bottle locations
-    bottles.sort(() => Math.random() - 0.5);
+    // Randomly choose full or empty
+    const isEmpty = Math.random() < 0.3;
 
-    bottles.forEach(type => {
 
-        const bottle = document.createElement("button");
+    if (isEmpty) {
 
-        bottle.classList.add("bottle");
+        bottle.textContent = "🧴";
 
-        if (type === "full") {
-            bottle.textContent = "💧";
-            bottle.setAttribute("aria-label", "Full water bottle");
-        } else {
-            bottle.textContent = "🫙";
-            bottle.classList.add("empty");
-            bottle.setAttribute("aria-label", "Empty bottle");
-        }
-
-        // Random bottle location
-        const x = Math.random() * 85 + 5;
-        const y = Math.random() * 65 + 20;
-
-        bottle.style.left = x + "%";
-        bottle.style.top = y + "%";
-
-        // What happens when a bottle is clicked?
-        bottle.addEventListener("click", () => {
-
-            if (!gameActive) return;
-
-            bottle.disabled = true;
-
-            if (type === "full") {
-
-                score++;
-                fullBottlesCollected++;
-
-                message.textContent = "Great job! You found clean water! 💧";
-
-            } else {
-
-                score = Math.max(0, score - 1);
-
-                message.textContent = "Oops! That bottle was empty! -1 point.";
-
-            }
-
-            // Update score
-            scoreDisplay.textContent = score;
-
-            // Update remaining full bottles
-            remainingDisplay.textContent =
-                totalFullBottles - fullBottlesCollected;
-
-            // Remove collected bottle
-            bottle.remove();
-
-            // Check for a win
-            if (fullBottlesCollected === totalFullBottles) {
-                endGame(true);
-            }
-        });
-
-        livingRoom.appendChild(bottle);
-    });
-}
-
-// WIN OR LOSE
-function endGame(won) {
-
-    gameActive = false;
-    clearInterval(timerInterval);
-
-    endScreen.classList.remove("hidden");
-
-    if (won) {
-
-        endTitle.textContent = "🎉 YOU WIN! 🎉";
-
-        endMessage.textContent =
-            "Amazing! You collected all 8 full water bottles! " +
-            "You helped make a difference! 💧";
-
-        message.textContent = "Congratulations!";
-
-        // Start confetti celebration
-        createConfetti();
+        bottle.dataset.type = "empty";
 
     } else {
 
-        endTitle.textContent = "⏰ TIME'S UP!";
+        bottle.textContent = "💧";
 
-        endMessage.textContent =
-            "You ran out of time! Try again to collect all the water bottles.";
-
-        message.textContent = "Game over!";
+        bottle.dataset.type = "full";
 
     }
+
+
+    bottle.classList.add("bottle");
+
+
+    // Random bottle position
+    const maxX = gameArea.clientWidth - 50;
+
+    const maxY = gameArea.clientHeight - 70;
+
+    bottle.style.left = Math.random() * maxX + "px";
+
+    bottle.style.top = Math.random() * maxY + "px";
+
+
+    // What happens when a bottle is clicked
+    bottle.addEventListener("click", function() {
+
+        if (!gameRunning) {
+            return;
+        }
+
+
+        // FULL BOTTLE
+        if (bottle.dataset.type === "full") {
+
+            score += 10;
+
+            scoreDisplay.textContent = score;
+
+            bottle.remove();
+
+
+            
+            // Get the winning goal for selected difficulty
+const winningGoal = difficulties[difficulty].goal;
+
+if (score >= winningGoal) {
+    endGame(true);
+}
+            }
+
+        }
+
+
+        // EMPTY BOTTLE
+        else {
+
+            timeLeft -= 5;
+
+            if (timeLeft < 0) {
+
+                timeLeft = 0;
+
+            }
+
+            timerDisplay.textContent = timeLeft;
+
+            bottle.remove();
+
+
+            // Lose if time reaches zero
+            if (timeLeft <= 0) {
+
+                endGame(false);
+
+            }
+
+        }
+
+    });
+
+
+    // Add bottle to the living room
+    gameArea.appendChild(bottle);
+
+
+    // Remove bottle after 3.5 seconds
+    setTimeout(function() {
+
+        bottle.remove();
+
+    }, 3500);
+
 }
 
-// CONFETTI EFFECT
+
+// END THE GAME
+function endGame(won) {
+
+    gameRunning = false;
+
+    clearInterval(timer);
+
+    clearInterval(bottleTimer);
+
+
+    // Remove remaining bottles
+    document.querySelectorAll(".bottle").forEach(function(bottle) {
+
+        bottle.remove();
+
+    });
+
+
+    messageScreen.classList.remove("hidden");
+
+    startButton.classList.add("hidden");
+
+
+    // WINNING SCREEN
+    if (won) {
+
+        message.textContent = "🏆 YOU WIN!";
+
+        finalScore.textContent =
+            "Amazing! You collected 10 water bottles!";
+
+        createConfetti();
+
+    }
+
+
+    // LOSING SCREEN
+    else {
+
+        message.textContent = "😢 GAME OVER!";
+
+        finalScore.textContent =
+            "Time ran out! Your final score is " + score;
+
+    }
+
+}
+
+
+// CREATE CONFETTI
 function createConfetti() {
 
     const colors = [
-        "#168b78",
-        "#f4cf55",
-        "#ff7b7b",
-        "#72c9ed",
-        "#bd8be8"
+        "red",
+        "blue",
+        "yellow",
+        "green",
+        "pink",
+        "purple"
     ];
+
 
     for (let i = 0; i < 100; i++) {
 
-        const piece = document.createElement("div");
+        const confetti = document.createElement("div");
 
-        piece.classList.add("confetti");
+        confetti.classList.add("confetti");
 
-        piece.style.left = Math.random() * 100 + "vw";
 
-        piece.style.backgroundColor =
+        // Random confetti position
+        confetti.style.left = Math.random() * 100 + "vw";
+
+
+        // Random confetti color
+        confetti.style.backgroundColor =
             colors[Math.floor(Math.random() * colors.length)];
 
-        piece.style.animationDelay =
+
+        // Random animation delay
+        confetti.style.animationDelay =
             Math.random() * 2 + "s";
 
-        document.body.appendChild(piece);
+
+        document.body.appendChild(confetti);
+
 
         // Remove confetti after animation
-        setTimeout(() => {
-            piece.remove();
+        setTimeout(function() {
+
+            confetti.remove();
+
         }, 5000);
+
     }
+
 }
 
-// RESET BUTTON
-resetButton.addEventListener("click", startGame);
 
-// PLAY AGAIN BUTTON
-playAgainButton.addEventListener("click", startGame);
+// RESET THE GAME
+function resetGame() {
 
-// START GAME WHEN PAGE LOADS
-startGame();
+    clearInterval(timer);
+
+    clearInterval(bottleTimer);
+
+    gameRunning = false;
+
+    // Get selected difficulty settings
+    const settings = difficulties[difficulty];
+
+    // Reset score and timer
+    score = 0;
+
+    timeLeft = settings.time;
+
+    scoreDisplay.textContent = score;
+
+    timerDisplay.textContent = timeLeft;
+
+    // Hide winning or losing screen
+    messageScreen.classList.add("hidden");
+
+    // Show start button
+    startButton.classList.remove("hidden");
+
+    // Remove bottles
+    document.querySelectorAll(".bottle").forEach(function(bottle) {
+
+        bottle.remove();
+
+    });
+
+    // Remove confetti
+    document.querySelectorAll(".confetti").forEach(function(piece) {
+
+        piece.remove();
+
+    });
+
+}
+
+    // Remove confetti
+    document.querySelectorAll(".confetti").forEach(function(piece) {
+
+        piece.remove();
+
+    });
+
+}
